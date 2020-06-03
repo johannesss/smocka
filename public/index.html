@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/static/buefy.min.css">
+    <link rel="stylesheet" href="//cdn.materialdesignicons.com/5.2.45/css/materialdesignicons.min.css">
+    <title>smocka - Create HTTP responses</title>
+
+    <style>
+      .ace_editor {
+        height: 200px;
+        border: 1px solid #dbdbdb;
+        border-radius: 4px;
+      }
+
+      .ace_editor:hover {
+        border-color: #b5b5b5;
+      }
+
+      .ace_editor.ace_focus  {
+        border-color: #7957d5;
+      }
+
+      [v-cloak] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <section class="hero is-dark is-bold">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">smocka</h1>
+            <h2 class="subtitle">Create HTTP responses</h2>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+
+          <div class="columns">
+            <div class="column is-4 is-offset-2">
+              <b-field
+                label="Status Code"
+                :label-position="labelPosition"
+                message="Specify what status code the response should have."
+              >
+                <b-autocomplete
+                  :loading="fetchingSettings"
+                  :disabled="fetchingSettings"
+                  ref="statusCode"
+                  v-model="statusCodeFilter"
+                  placeholder="Pick response status code"
+                  :keep-first="true"
+                  :open-on-focus="true"
+                  :data="filteredStatusCodes"
+                  :clearable="true"
+                  field="text"
+                  @select="setStatusCode"
+                  @blur="handleStatusCodeBlur"
+                />
+              </b-field>
+            </div>
+
+            <div class="column is-4">
+              <b-field
+                label="TTL (minutes)"
+                :label-position="labelPosition"
+              >
+                <div slot="message">
+                  Specify how many minutes the generated URL should be available.<br>
+                  <b>0 = indefinitely</b>
+                </div>
+                <b-numberinput
+                  v-model="form.ttl"
+                  :step="60"
+                  :min="0"
+                  :editable="false"
+                >
+              </b-field>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-4 is-offset-2">
+              <b-field
+                label="Content Type"
+                :label-position="labelPosition"
+                message="Specify what the 'Content-Type' header on the response should be."
+              >
+                <b-select
+                  v-model="form.content_type"
+                  placeholder="Pick a content type"
+                  expanded
+                  @input="setEditorMode"
+                >
+                  <option
+                    v-for="type in contentTypes"
+                    :value="type"
+                    :key="type"
+                  >
+                    {{ type }}
+                  </option>
+                </b-select>
+              </b-field>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-8 is-offset-2">
+              <b-field
+                class="body"
+                label="Body"
+                :label-position="labelPosition"
+              >
+                <textarea ref="body"></textarea>
+              </b-field>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-4 is-offset-2">
+              <b-button
+                type="is-primary"
+                @click="submit"
+                :disabled="fetchingSettings || loading"
+                :loading="loading"
+              >
+                Create response
+              </b-button>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-8 is-offset-2">
+              <transition name="fade">
+                <b-message type="is-primary" v-if="responseLink">
+                  Your response is ready!<br/>
+                  <a
+                    :href="responseLink"
+                    ref="responseLinkAnchor"
+                    target="_blank"
+                    class="is-primary"
+                  >
+                    {{ responseLink }}
+                  </a>
+                  <br />
+                  <b-button
+                    v-if="responseLinkCopySuccess === null"
+                    @click="copyResponseLink"
+                    type="is-primary is-small"
+                    style="margin-top: 10px;"
+                  >
+                    Copy URL
+                  </b-button>
+
+                  <b-button
+                    v-else
+                    disabled
+                    type="is-primary is-small"
+                    style="margin-top: 10px;"
+                  >
+                    <span v-if="responseLinkCopySuccess === true">URL copied to clipboard!</span>
+                    <span v-else>Could not copy URL</span>
+                  </b-button>
+
+                </b-message>
+              </transition>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+
+    <script src="https://pagecdn.io/lib/ace/1.4.5/ace.js"></script>
+    <script src="/static/es6-promise.auto.min.js"></script>
+    <script src="/static/axios.min.js"></script>
+    <script src="/static/vue.js"></script>
+    <script src="/static/buefy.min.js"></script>
+    <script src="/static/app.js"></script>
+
+  </body>
+</html>
