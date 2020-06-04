@@ -4,5 +4,4 @@ __pycache__
 **/.idea
 .vscode
 .DS_Store
-app/database/db.sqlite
-
+.db
