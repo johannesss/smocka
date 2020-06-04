@@ -58,14 +58,19 @@ new Vue({
 
       axios.post('/response', this.form, config)
         .then(function (response) {
-          setTimeout(function () {
-            self.responseLink = window.location.origin + response.data.url;
-            self.loading = false;
-          }, 300);
+          self.responseLink = window.location.origin + response.data.url;
         })
         .catch(function (err) {
-          alert('Could not save response!');
-          console.error(err);
+          console.error('Could not save the response.', err);
+          self.$buefy.snackbar.open({
+            position: 'is-bottom',
+            message: 'Something went wrong saving the response!',
+            type: 'is-danger',
+            indefinite: true
+          });
+        })
+        .finally(function () {
+          self.loading = false;
         });
     },
 
