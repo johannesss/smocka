@@ -1,0 +1,27 @@
+body, #app {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+#content {
+    flex: 1;
+}
+
+.ace_editor {
+    height: 200px;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+}
+
+.ace_editor:hover {
+    border-color: #b5b5b5;
+}
+
+.ace_editor.ace_focus  {
+    border-color: #7957d5;
+}
+
+[v-cloak] {
+    display: none !important;
+}
