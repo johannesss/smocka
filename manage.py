@@ -12,15 +12,16 @@ from app.database import init_db as init_db_fn
 def run(init_db, init_app):
     if init_db:
         init_db_fn()
-        print('Initialized the database!')
+        print('init-db: Initialized the database!')
         return
 
     if init_app:
         if os.path.isfile(db_file_path):
-            print('Database already exists, exiting')
+            print('init-app: Database already exists, exiting')
             return
 
         init_db_fn()
+        print('init-app: Initialized the database!')
         return
 
 
