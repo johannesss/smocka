@@ -5,6 +5,7 @@ WORKDIR /smocka
 ADD app.py /
 ADD manage.py /
 
+COPY .db /.db
 COPY app /app
 COPY public /public
 
