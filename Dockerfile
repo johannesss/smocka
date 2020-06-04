@@ -2,17 +2,17 @@ FROM python:3
 
 WORKDIR /smocka
 
-ADD app.py /
-ADD manage.py /
+ADD app.py ./
+ADD manage.py ./
 
-COPY .db /.db
-COPY app /app
-COPY public /public
+COPY .db ./.db
+COPY app ./app
+COPY public ./public
 
-ADD requirements.txt /
+ADD requirements.txt ./
 
-RUN pip install -r /requirements.txt
+RUN pip install -r ./requirements.txt
 
-RUN python /manage.py --init-app
+RUN python ./manage.py --init-app
 
-CMD [ "python", "./app.py" ]
+CMD [ "python", "/smocka/app.py" ]
