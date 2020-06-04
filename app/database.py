@@ -4,9 +4,9 @@ import uuid
 from datetime import datetime, timedelta
 from os.path import dirname
 
-root_dir = dirname(os.path.dirname(os.path.abspath(__file__)))
-db_filename = 'db.sqlite'
-schema_filename = 'schema.sql'
+root_dir_path = dirname(os.path.dirname(os.path.abspath(__file__)))
+db_file_path = root_dir_path + '/.db/db.sqlite'
+schema_file_path = root_dir_path + '/app/database/schema.sql'
 
 
 def generate_uuid():
@@ -21,8 +21,7 @@ def _dict_factory(cursor, row):
 
 
 def get_connection():
-    db_file = root_dir + '/app/database/' + db_filename
-    conn = sqlite3.connect(db_file)
+    conn = sqlite3.connect(db_file_path)
     conn.row_factory = _dict_factory
 
     return conn
@@ -36,10 +35,9 @@ def get_response_repository():
 def init_db():
     conn = get_connection()
     cursor = conn.cursor()
-    schema = root_dir + '/app/database/' + schema_filename
 
     try:
-        with open(schema) as f:
+        with open(schema_file_path) as f:
             cursor.executescript(f.read())
     except IOError as e:
         print(e)
